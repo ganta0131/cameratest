@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>🌟爆笑ほめカメラ（デバッグ用・最新モデル）🌟</title>
+  <title>🌟爆笑ほめカメラ（完成版）🌟</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -52,17 +52,17 @@
   </style>
 </head>
 <body>
-  <h1>🌟爆笑ほめカメラ（デバッグ用、最新モデル）🌟</h1>
+  <h1>🌟爆笑ほめカメラ🌟</h1>
 
   <button id="startCameraBtn">📷 カメラを起動</button><br />
   <video id="video" autoplay playsinline style="display:none;"></video><br />
   <button id="shootBtn" style="display:none;">📸 撮影してAIコメント！</button><br />
   <canvas id="canvas" style="display:none;"></canvas>
   <img id="photo" alt="写真プレビュー" /><br />
-  <div id="comment" class="balloon">ここにAPIの返答が表示されます</div>
+  <div id="comment" class="balloon">ここに爆笑コメントが表示されます</div>
 
   <script>
-    const apiKey = "AIzaSyAE7IC-TdIYFEWaEfvnP0iLciFBYU_Yfxk"; // あなたのAPIキーに差し替えてください
+    const apiKey = "AIzaSyAE7IC-TdIYFEWaEfvnP0iLciFBYU_Yfxk"; // ←★ここに自分のAPIキーを貼ってね！
 
     const startCameraBtn = document.getElementById("startCameraBtn");
     const shootBtn = document.getElementById("shootBtn");
@@ -71,6 +71,7 @@
     const photo = document.getElementById("photo");
     const comment = document.getElementById("comment");
 
+    // カメラ起動
     startCameraBtn.onclick = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -83,6 +84,7 @@
       }
     };
 
+    // 撮影＆AIコメント取得
     shootBtn.onclick = async () => {
       if (!video.srcObject) {
         alert("まずカメラを起動してください！");
@@ -95,7 +97,7 @@
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       const imageDataUrl = canvas.toDataURL("image/jpeg");
 
-      comment.textContent = "AIが爆笑コメントを考え中…少し待ってね！";
+      comment.textContent = "AIが爆笑コメントを考え中…";
 
       const prompt = `あなたは、どんな画像を見ても爆笑しながら、その魅力を全力でほめまくる面白AIです。
 
@@ -125,10 +127,19 @@
 
         const data = await res.json();
 
-        // デバッグ用にAPIの返答を丸ごと表示
-        comment.textContent = JSON.stringify(data, null, 2);
+        const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "コメント取得に失敗しました。";
+        comment.textContent = aiText;
 
+        // 読み上げ（アニメ風）
+        const msg = new SpeechSynthesisUtterance(aiText);
+        msg.lang = "ja-JP";
+        msg.pitch = 2.0;
+        msg.rate = 1.0;
+        speechSynthesis.speak(msg);
+
+        // 撮った画像を表示
         photo.src = imageDataUrl;
+
       } catch (error) {
         comment.textContent = "コメント生成に失敗しました。ネット環境やAPIキーを確認してね。";
         console.error(error);
