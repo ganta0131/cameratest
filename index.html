@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>🌟爆笑ほめカメラ（デバッグ用）🌟</title>
+  <title>🌟爆笑ほめカメラ（デバッグ用・最新モデル）🌟</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -42,7 +42,7 @@
       margin-top: 1em;
       font-size: 1.1em;
       border: 2px dashed #f88;
-      white-space: pre-wrap; /* 改行を反映 */
+      white-space: pre-wrap;
       min-height: 5em;
       text-align: left;
       max-width: 400px;
@@ -62,7 +62,7 @@
   <div id="comment" class="balloon">ここにAPIの返答が表示されます</div>
 
   <script>
-    const apiKey = "AIzaSyAE7IC-TdIYFEWaEfvnP0iLciFBYU_Yfxk"; // ←ここにAPIキー
+    const apiKey = "AIzaSyAE7IC-TdIYFEWaEfvnP0iLciFBYU_Yfxk"; // あなたのAPIキーに差し替えてください
 
     const startCameraBtn = document.getElementById("startCameraBtn");
     const shootBtn = document.getElementById("shootBtn");
@@ -110,7 +110,7 @@
 ↓この画像です：`;
 
       try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent?key=${apiKey}`, {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -125,10 +125,8 @@
 
         const data = await res.json();
 
-        // ★ここでレスポンス全体を画面に表示（デバッグ用）
+        // デバッグ用にAPIの返答を丸ごと表示
         comment.textContent = JSON.stringify(data, null, 2);
-
-        // TTSはまだ使わず、コメントの場所がわかったら後で追加しましょう
 
         photo.src = imageDataUrl;
       } catch (error) {
