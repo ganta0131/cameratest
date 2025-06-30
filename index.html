@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>爆笑カメラ</title>
+    <style>
+      body {
+        text-align: center;
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      button {
+        font-size: 18px;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+      }
+      video {
+        width: 90%;
+        max-width: 400px;
+        border-radius: 10px;
+        border: 2px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>爆笑カメラ📸</h1>
+    <button onclick="startCamera()">📷 カメラを起動</button><br />
+    <video id="video" autoplay playsinline></video>
+
+    <script>
+      async function startCamera() {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          const video = document.getElementById("video");
+          video.srcObject = stream;
+        } catch (err) {
+          alert("カメラ起動に失敗しました：" + err.message);
+        }
+      }
+    </script>
+  </body>
+</html>
